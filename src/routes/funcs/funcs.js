@@ -18,9 +18,11 @@ export async function get_home_path() {
 /**
  * @param {string} path
  */
+// FIXME: U dont need this function if u'll calculate splitted files on frontend...
 export async function get_breadcrumb_items(path) {
     return await invoke('split_dir', {dir: path});
 }
+
 
 
 export async function get_files_and_directories(path) {
@@ -41,6 +43,25 @@ export async function prettify_files_and_directories(array_of_files_and_director
 
     return arr;
 }
+
+export function clickOutside(node) {
+  
+    const handleClick = event => {
+      if (node && !node.contains(event.target) && !event.defaultPrevented) {
+        node.dispatchEvent(
+          new CustomEvent('click_outside', node)
+        )
+      }
+    }
+  
+      document.addEventListener('click', handleClick, true);
+    
+    return {
+      destroy() {
+        document.removeEventListener('click', handleClick, true);
+      }
+      }
+  }
 
 
 export const zip = (a, b) => a.map((k, i) => [k, b[i]]);

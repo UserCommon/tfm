@@ -32,9 +32,14 @@ impl FileOrDir {
 
 #[tauri::command]
 pub fn ls(path: String) -> Vec<FileOrDir> {
+    let mut v: Vec<FileOrDir> = vec![];
+
+    //if path.is_empty() {
+    //    return v;
+    //}
+
     let iter = fs::read_dir(path).expect("ls functions unable to read dir");
     
-    let mut v: Vec<FileOrDir> = vec![];
     for path  in iter {
         v.push(FileOrDir::new(path.expect("unable to get path in ls function").path().display().to_string()))
     }
