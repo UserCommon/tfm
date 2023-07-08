@@ -1,36 +1,41 @@
 <script>
 	import { onMount } from "svelte";
-    import { dir, curr_path, files_and_directories, pretty_files_and_directories, cols  } from "../stores.js";
-    import { get_files_and_directories, prettify_files_and_directories, get_grids } from "../funcs/funcs.js"
+    import { dir, curr_path, files_and_directories, pretty_files_and_directories, cols, iconbox_size  } from "../stores.js";
+    import { get_files_and_directories, prettify_files_and_directories, get_grids, } from "../funcs/funcs.js"
     import { Button, Card } from "flowbite-svelte";
 	import IconBox from "./IconBox.svelte";
 
-    // async function scale(val) {
-        // - scale up + scale down
-      //  cols += val;
-    //}
-
-    function log_files_and_dirs() {
-        console.log($files_and_directories);
+    let files_and_dirs = $files_and_directories;
+    function reassign() {
+        // it's seems like it's not good decision to make this function...
+        // However...
+        files_and_dirs = $files_and_directories;
+        console.log(files_and_dirs)
     }
 
-   /*  onMount(async () => {
-        window.addEventListener('resize', async (event) => {
-            cols.set( await get_grids())
-        });
-        cols.set(await get_grids());
-        console.log($cols);
-    }); */
+    $: $files_and_directories, reassign();
 
     
-    // TODO!  1) write name under 2) Icon of file or of directory check file type
+
+    onMount(async () => {
+        /* window.addEventListener('resize', resize);
+        await resize();
+        pretty = $pretty_files_and_directories; 
+
+        return () => {
+            window.removeEventListener('resize', resize);
+        } */
+    });
 </script>
 
 <section>
-
-    <div class="body grid grid-cols-6 gap-4 m-3">
-        {#each $pretty_files_and_directories as file_or_dir}
-            <IconBox name="{file_or_dir}" />
+    <div class="justify-items-center grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 2xl:grid-cols-12 gap-3 m-3 justify-between">
+        {#each files_and_dirs as file}
+                <IconBox file={file}/>
         {/each}
     </div>
 </section>
+
+<style>
+
+</style>

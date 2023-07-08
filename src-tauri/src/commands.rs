@@ -1,5 +1,5 @@
 use std::io::{Result, Error};
-use std::fs;
+use std::fs::{self, File};
 use std::env;
 
 #[tauri::command]
@@ -15,13 +15,28 @@ pub fn get_home() -> String {
     }
 }
 
+#[derive(serde::Serialize)]
+pub struct FileOrDir {
+    pub path: String,
+    pub selected: bool 
+}
+
+impl FileOrDir {
+    fn new(path: String) -> Self {
+        Self {
+            path: path,
+            selected: false,
+        }
+    }
+}
+
 #[tauri::command]
-pub fn ls(path: String) -> Vec<String> {
+pub fn ls(path: String) -> Vec<FileOrDir> {
     let iter = fs::read_dir(path).expect("ls functions unable to read dir");
     
-    let mut v: Vec<String> = vec![];
+    let mut v: Vec<FileOrDir> = vec![];
     for path  in iter {
-        v.push(path.expect("unable to get path in ls function").path().display().to_string());
+        v.push(FileOrDir::new(path.expect("unable to get path in ls function").path().display().to_string()))
     }
 
     v

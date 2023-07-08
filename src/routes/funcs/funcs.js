@@ -1,13 +1,13 @@
 import { onDestroy } from 'svelte';
 
 import { invoke } from '@tauri-apps/api/tauri';
-import { curr_path, dir, hidden_dot_files } from '../stores';
+import { curr_path, dir, hidden_dot_files, is_control_down, is_shift_down, keys_down } from '../stores';
 import { currentMonitor } from '@tauri-apps/api/window';
 
 // GUI
 export async function get_grids() {
     // We need scale parameter consider that 256 is scale parameter by default
-    return Math.trunc(window.innerWidth / 200 )* (window.devicePixelRatio);
+    return Math.trunc((window.innerWidth / 200)* (window.devicePixelRatio));
 }
 
 // File System
@@ -34,7 +34,7 @@ export async function prettify_files_and_directories(array_of_files_and_director
     hidden_dot_files.subscribe((val) => {isHidden = val;});
 
     array_of_files_and_directories.forEach((element) => {
-        el = element.split("/").slice(-1)[0];
+        el = element.path.split("/").slice(-1)[0];
         if(el[0] != ".")
             arr.push(el);
     })
@@ -42,6 +42,8 @@ export async function prettify_files_and_directories(array_of_files_and_director
     return arr;
 }
 
+
+export const zip = (a, b) => a.map((k, i) => [k, b[i]]);
 /* export async function ddo() {
     dir.set(await get_home_path());
     console.log(dir);
