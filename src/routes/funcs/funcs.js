@@ -29,7 +29,11 @@ export async function get_files_and_directories(path) {
     return await invoke('ls', {path: path});
 }
 
-export async function prettify_files_and_directories(array_of_files_and_directories) {
+export async function open_file(path) {
+  return await invoke('open_file', {path: path});
+}
+
+/* export async function prettify_files_and_directories(array_of_files_and_directories) {
     let arr = [];
     let el;
     let isHidden = false;
@@ -42,7 +46,7 @@ export async function prettify_files_and_directories(array_of_files_and_director
     })
 
     return arr;
-}
+} */
 
 export function clickOutside(node) {
   
@@ -60,8 +64,8 @@ export function clickOutside(node) {
       destroy() {
         document.removeEventListener('click', handleClick, true);
       }
-      }
-  }
+    }
+}
 
 
 export const zip = (a, b) => a.map((k, i) => [k, b[i]]);

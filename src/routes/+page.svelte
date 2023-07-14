@@ -1,9 +1,10 @@
 <script>
     import Header from "./header/Header.svelte";
     import Body from "./body/Body.svelte"
-    import { clickOutside, get_home_path, get_breadcrumb_items, get_files_and_directories, prettify_files_and_directories, zip} from './funcs/funcs';
-    import { dir, curr_path, files_and_directories, pretty_files_and_directories,  is_control_down, is_shift_down, keys_down, is_key_listener_enabled, is_menu_visible} from "./stores";
+    import { clickOutside, get_home_path, get_breadcrumb_items, get_files_and_directories, zip} from './funcs/funcs';
+    import { dir, curr_path, files_and_directories, pretty_files_and_directories,  is_control_down, is_shift_down, keys_down, is_key_listener_enabled, is_menu_visible, is_dot_visible} from "./stores";
     import { onDestroy, onMount } from "svelte";
+	import { invoke } from "@tauri-apps/api/tauri";
 
     let path = "";
 
@@ -15,12 +16,20 @@
 		
         files_and_directories.set(await get_files_and_directories(path));
 		//console.log($files_and_directories);
-        pretty_files_and_directories.set(await prettify_files_and_directories($files_and_directories));
 
         return () => {
             [path];
         }
     });
+
+	async function deleteFileOrDir() {
+		$files_and_directories.forEach(async (element) => {
+			if(element.selected) {
+				await invoke("delete", {file: element});
+			}
+		});
+		files_and_directories.set(await get_files_and_directories($dir));
+	}
 
 	function keydownEvents(event) {
 		if($is_key_listener_enabled) {
@@ -35,7 +44,7 @@
 					break;
 				case "Delete":
 					console.log("Delete func");
-					// TODO: deletation arr of selected to function;
+					deleteFileOrDir();
 					event.preventDefault();
 					break;
 				case "Escape":
@@ -81,23 +90,29 @@
 
 		// There is the bug cause shift + char = CHAR and i dunno what to do
 		//rewrite keyevent	
+
+		// DESELECT CTRL+SHIFT+A
 		if($keys_down[0] == 1 && $is_control_down && $is_shift_down) {
 			$files_and_directories.forEach((element) => {
 				element.selected = false;
 			});
-			$files_and_directories = $files_and_directories;;
+			$files_and_directories = $files_and_directories;
 			return;
 		}
 
+		// SELECT ALL CTRL+A
 		if($keys_down[0] == 1 && $is_control_down) {
 			$files_and_directories.forEach((element) => {
 				element.selected = true;
 			});
-			$files_and_directories = $files_and_directories;;
-
+			$files_and_directories = $files_and_directories;
 			return;
 		}
-		//console.log($files_and_directories);
+
+		// HIDE/SHOW DOTFILES CTRL+H
+		if ($keys_down[7] && $is_control_down) {
+			$is_dot_visible = !$is_dot_visible;
+		}
 	}
 
 	function onKeyDown(event) {
@@ -108,7 +123,6 @@
 	function clear() {
 		console.log("penis")
 	}
-
 
 </script>
 

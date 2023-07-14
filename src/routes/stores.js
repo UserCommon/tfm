@@ -18,9 +18,16 @@ export let iconbox_size = 200;
 export let cols = writable(Math.trunc(window.innerWidth / iconbox_size) * (window.devicePixelRatio));
 // Page -> selected_files -> select in frontend
 
+export let is_dot_visible  = writable(false);
 export let is_control_down = writable(false);
 export let is_shift_down   = writable(false);
 export let keys_down 	   = writable(Array(26).fill(0));
 
 export let is_menu_visible = writable(false);
 export let is_key_listener_enabled = writable(true);
+
+// Сюда сохраняем on_copy obj и удялем отсюда.
+export let on_copy = writable([])
+// Сначала копируем, затем удаляем 
+export let on_cut = writable([])
+

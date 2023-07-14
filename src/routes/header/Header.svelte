@@ -31,7 +31,7 @@
 
 <section>
    
-    <div class="header w-full">
+    <div class="header relative w-full">
         <div class="grid grid-cols-12 grid-rows-1 gap-3 m-2">
             <Button class="col-span-1" on:click={goPrev}> &lt </Button>
             <Button class="col-span-1"> &gt </Button>
@@ -42,8 +42,10 @@
                 {/each}
             </Breadcrumb>
             <Button class="col-span-1" on:click={() => {$is_menu_visible = true}}>+</Button> 
-            <Popup/>           
-        </div>    
+        </div>
+    </div>
+    <div class="z-index-10 relative">
+        <Popup/>
     </div>
 
 </section>

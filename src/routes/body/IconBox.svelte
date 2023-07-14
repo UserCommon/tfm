@@ -4,7 +4,7 @@
     import { Card } from "flowbite-svelte";
 	import { onDestroy } from "svelte";
     import { dir, files_and_directories, is_control_down } from "../stores";
-	import { clickOutside, get_files_and_directories } from "../funcs/funcs";
+	import { clickOutside, get_files_and_directories, open_file } from "../funcs/funcs";
 
     export let file;
 
@@ -39,16 +39,23 @@
         }
     }
 
-    async function changeDirectoryOrOpenFile(path) {
-        $dir = path;
-        console.log($dir);
-        $files_and_directories = await get_files_and_directories($dir);
-        console.log($files_and_directories);
+    async function changeDirectoryOrOpenFile(file) {
+        let path = file.path;
+        if(file.file_or_dir_type == "Directory") {
+            $dir = path;
+            console.log($dir);
+            $files_and_directories = await get_files_and_directories($dir);
+            console.log($files_and_directories);
+        }
+        if(file.file_or_dir_type == "File") {
+            await open_file(path);
+            console.log("openned!");
+        }
     }
 </script>
 
 
-<section class="IconBox grow-0 h-24 w-16" on:dblclick={changeDirectoryOrOpenFile(file.path)} on:click={handleClick} use:clickOutside on:click_outside={clear}>
+<section class="IconBox grow-0 h-24 w-16" on:dblclick={changeDirectoryOrOpenFile(file)} on:click={handleClick} use:clickOutside on:click_outside={clear}>
     <Card class="bg-gray-300">
         <!-- Create widget -->
     </Card>
