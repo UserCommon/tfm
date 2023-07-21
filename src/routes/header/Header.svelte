@@ -31,20 +31,20 @@
 
 <section>
    
-    <div class="header relative w-full">
+    <div class="header w-full z-10">
         <div class="grid grid-cols-12 grid-rows-1 gap-3 m-2">
-            <Button class="col-span-1" on:click={goPrev}> &lt </Button>
-            <Button class="col-span-1"> &gt </Button>
-            <Breadcrumb class="col-span-9">
+            <Button class="col-span-1" on:click={goPrev}> ^ </Button>
+            <!--<Button class="col-span-1"> &gt </Button>-->
+            <Breadcrumb class="col-span-10">
                 <!---/home/usr - должен быть  Home..--->
                 {#each splitPath($dir) as path}
-                    <BreadcrumbItem href="/{path}" >{path}</BreadcrumbItem>
+                    <BreadcrumbItem>{path}</BreadcrumbItem>
                 {/each}
             </Breadcrumb>
-            <Button class="col-span-1" on:click={() => {$is_menu_visible = true}}>+</Button> 
+            <Button class="col-span-1" on:click={() => {$is_menu_visible = !$is_menu_visible}}>+</Button> 
         </div>
     </div>
-    <div class="z-index-10 relative">
+    <div class="absolute z-0">
         <Popup/>
     </div>
 

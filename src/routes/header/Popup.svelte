@@ -32,8 +32,8 @@
 
 
 {#if $is_menu_visible}
-<section>
-    <div class='mb-6 max-w-sm z-10 m-3'>
+<section class = "left">
+    <div class='mb-6 max-w-sm m-3'>
         <div class="select-mode grid grid-cols-2">
             <Button class="col-span-1" on:click={() => state = "Dir"}>Dir</Button>
             <Button class="col-span-1" on:click={() => state = "File"}>File</Button>

@@ -132,11 +132,11 @@
 	on:keyup={keyupEvents}
 />
 
-<header class="sticky top-2 bg-white">
+<header class="z-20 sticky top-2 bg-white">
     <Header/>
 </header>
 
-<section class="select-none">
+<section class="select-none z-10">
     <Body/>
 </section>
 
