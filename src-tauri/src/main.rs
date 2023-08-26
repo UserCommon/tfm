@@ -12,7 +12,17 @@ use std::env;
 
 fn main() {
   tauri::Builder::default()
-    .invoke_handler(tauri::generate_handler![get_path, get_home, split_dir, ls, open_file, create_dir, create_file, delete])
+    .invoke_handler(tauri::generate_handler![
+      get_path,
+      get_home,
+      split_dir,
+      ls,
+      open_file,
+      create_dir,
+      create_file,
+      delete,
+      paste_file
+    ])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
 }

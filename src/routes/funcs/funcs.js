@@ -23,7 +23,9 @@ export async function get_breadcrumb_items(path) {
     return await invoke('split_dir', {dir: path});
 }
 
-
+export async function paste(curr_path, file_path) {
+  return await invoke('paste_file', {filePath : file_path, destPath : curr_path});
+}
 
 export async function get_files_and_directories(path) {
     return await invoke('ls', {path: path});
@@ -69,6 +71,10 @@ export function clickOutside(node) {
 
 
 export const zip = (a, b) => a.map((k, i) => [k, b[i]]);
+
+export function arrayToString(arr) {
+  return "/" + arr.join("/");
+}
 /* export async function ddo() {
     dir.set(await get_home_path());
     console.log(dir);

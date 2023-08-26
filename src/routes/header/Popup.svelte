@@ -25,14 +25,14 @@
             await invoke('create_file', arg);
         if(state == "Dir")
             await invoke('create_dir', arg);
-        files_and_directories.set(await get_files_and_directories($dir));
+		files_and_directories.set(await get_files_and_directories($dir));
     }
     // make non visible on esc button   
 </script>
 
 
 {#if $is_menu_visible}
-<section class = "left">
+<section class = "bg-white p-2 rounded-md bg-opacity-75">
     <div class='mb-6 max-w-sm m-3'>
         <div class="select-mode grid grid-cols-2">
             <Button class="col-span-1" on:click={() => state = "Dir"}>Dir</Button>

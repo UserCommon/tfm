@@ -44,8 +44,5 @@
             <Button class="col-span-1" on:click={() => {$is_menu_visible = !$is_menu_visible}}>+</Button> 
         </div>
     </div>
-    <div class="absolute z-0">
-        <Popup/>
-    </div>
 
 </section>

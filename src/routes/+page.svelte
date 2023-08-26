@@ -1,8 +1,8 @@
 <script>
     import Header from "./header/Header.svelte";
     import Body from "./body/Body.svelte"
-    import { clickOutside, get_home_path, get_breadcrumb_items, get_files_and_directories, zip} from './funcs/funcs';
-    import { dir, curr_path, files_and_directories, pretty_files_and_directories,  is_control_down, is_shift_down, keys_down, is_key_listener_enabled, is_menu_visible, is_dot_visible} from "./stores";
+    import { clickOutside, get_home_path, get_breadcrumb_items, get_files_and_directories, zip, paste, arrayToString	} from './funcs/funcs';
+    import { dir, curr_path, files_and_directories, pretty_files_and_directories,  is_control_down, is_shift_down, keys_down, is_key_listener_enabled, is_menu_visible, is_dot_visible, on_copy} from "./stores";
     import { onDestroy, onMount } from "svelte";
 	import { invoke } from "@tauri-apps/api/tauri";
 
@@ -107,6 +107,28 @@
 			});
 			$files_and_directories = $files_and_directories;
 			return;
+		}
+		
+		// COPY CTRL+C
+		if($is_control_down && $keys_down[2] == 1) {
+			console.log("ctrl+c");
+			$on_copy = [];
+			$files_and_directories.forEach((element) => {
+				if(element.selected)
+					$on_copy.push(element);
+			});
+			console.log($on_copy);
+		}
+
+		// INSERT CTRL+V
+		if($is_control_down && $keys_down[21]) {
+			console.log("ctrl+v");
+			$on_copy.forEach(async (element) => {
+				await paste($dir, element.path);
+				console.log(element.path);
+				files_and_directories.set(await get_files_and_directories($dir));
+
+			});
 		}
 
 		// HIDE/SHOW DOTFILES CTRL+H

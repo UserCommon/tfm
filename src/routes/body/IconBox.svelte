@@ -47,7 +47,7 @@
             $files_and_directories = await get_files_and_directories($dir);
             console.log($files_and_directories);
         }
-        if(file.file_or_dir_type == "File") {
+        if(file.file_or_dir_type == "File" || file.file_or_dir_type == "Image") {
             await open_file(path);
             console.log("openned!");
         }
@@ -56,9 +56,14 @@
 
 
 <section class="IconBox grow-0 h-24 w-16" on:dblclick={changeDirectoryOrOpenFile(file)} on:click={handleClick} use:clickOutside on:click_outside={clear}>
-    <Card class="bg-gray-300">
-        <!-- Create widget -->
-    </Card>
+    
+    {#if file.file_or_dir_type == "Image"}
+        <img src = "file://{file.path}" width="20" height="20">
+    {:else}
+        <Card class="bg-gray-300">
+            <!-- Create widget -->
+        </Card>
+    {/if}
     <div class="grid place-content-center text-sm break-all">
         {#if file.selected}
             <div class="bg-orange-400 rounded">

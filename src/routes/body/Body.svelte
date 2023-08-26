@@ -4,12 +4,16 @@
     import { clickOutside, get_files_and_directories, get_grids, } from "../funcs/funcs.js"
     import { Button, Card } from "flowbite-svelte";
 	import IconBox from "./IconBox.svelte";
+    import Popup from "../header/Popup.svelte";
 
 </script>
 
 
 
-<section>
+<section class = "">
+    <div class="absolute z-0 left-[83%] ">
+        <Popup/>
+    </div>
     <div class="justify-items-center grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 2xl:grid-cols-12 gap-3 m-3 justify-between">
         {#each $files_and_directories as file}
             {#if file.is_dot == 0 || $is_dot_visible }

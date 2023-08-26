@@ -2,7 +2,7 @@ use std::io::{Result, Error};
 use std::fs::{self, File};
 use std::env;
 use std::process::Command;
-use std::path::PathBuf;
+use std::path::{PathBuf, Path};
 
 #[tauri::command]
 pub fn get_path(curr: String) -> String {
@@ -51,10 +51,36 @@ impl FileOrDir {
     }
 }
 
+fn has_extension(path: &PathBuf, _type: &str) -> bool {
+    path
+        .file_name()
+        .unwrap()
+        .to_str()
+        .map_or(false, |s| s.to_lowercase().ends_with(_type))
+}
+
+fn is_image(path: &PathBuf) -> bool {
+    let types = [
+        "png",
+        "jpg",
+        "jpeg"
+    ];
+
+    for _type in types {
+        if has_extension(path, _type) {
+            return true;
+        }
+    }
+    false
+}
+
 pub fn file_or_dir_type(path: &PathBuf) -> FileOrDirType {
     if path.is_dir() {
         return FileOrDirType::Directory;
     } else if path.is_file() {
+        if is_image(path) {
+            return FileOrDirType::Image;
+        }
         return FileOrDirType::File;
     }
     FileOrDirType::Unknown
@@ -138,6 +164,14 @@ pub fn create_dir(path: String, name: String) {
 #[tauri::command]
 pub fn create_file(path: String, name: String) {
     fs::File::create(format!("{}/{}", path, name)).expect("Failed to create file in create_file");
+}
+
+
+/// Pastes to destenation
+#[tauri::command]
+pub fn paste_file(file_path: String, dest_path: String) {
+    fs::copy(file_path.clone(), format!("{}/{}", dest_path, file_path.clone().split("/").last().unwrap()))
+        .expect("unable to copy");
 }
 
 #[tauri::command]
